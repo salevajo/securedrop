@@ -8,14 +8,12 @@ from tests.functional.pageslayout.utils import save_static_data
 
 @pytest.mark.pagelayout
 class TestSubmitAndRetrieveFile:
-    def test_submit_and_retrieve_happy_path(
-        self, sd_servers_with_clean_state, tor_browser_web_driver, firefox_web_driver
-    ):
+    def test_submit_and_retrieve_happy_path(self, sd_servers_with_clean_state, firefox_web_driver):
         # Given a source user accessing the app from their browser
         locale = firefox_web_driver.locale
         source_app_nav = SourceAppNavigator(
             source_app_base_url=sd_servers_with_clean_state.source_app_base_url,
-            web_driver=tor_browser_web_driver,
+            web_driver=firefox_web_driver,
             accept_languages=locale,
         )
 
@@ -34,6 +32,7 @@ class TestSubmitAndRetrieveFile:
         journ_app_nav = JournalistAppNavigator(
             journalist_app_base_url=sd_servers_with_clean_state.journalist_app_base_url,
             web_driver=firefox_web_driver,
+            accept_languages=locale,
         )
         journ_app_nav.journalist_logs_in(
             username=sd_servers_with_clean_state.journalist_username,

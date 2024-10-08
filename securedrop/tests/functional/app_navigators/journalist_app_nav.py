@@ -351,6 +351,7 @@ class JournalistAppNavigator:
         # Ensure the admin is allowed to edit the journalist
         def can_edit_user():
             h = self.driver.find_elements(By.TAG_NAME, "h1")[0]
-            assert f'Edit user "{username_of_journalist_to_edit}"' == h.text
+            if not self.accept_languages:
+                assert f'Edit user "{username_of_journalist_to_edit}"' == h.text
 
         self.nav_helper.wait_for(can_edit_user)

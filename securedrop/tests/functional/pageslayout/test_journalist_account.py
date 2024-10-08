@@ -86,7 +86,7 @@ class TestJournalistLayoutAccount:
             explanatory_tooltip_opacity = explanatory_tooltip.value_of_css_property("opacity")
             assert explanatory_tooltip_opacity == "1"
 
-            if assert_tooltip_text_is:
+            if assert_tooltip_text_is and not journ_app_nav.accept_languages:
                 assert explanatory_tooltip.text == assert_tooltip_text_is
 
         journ_app_nav.nav_helper.wait_for(explanatory_tooltip_is_correct)

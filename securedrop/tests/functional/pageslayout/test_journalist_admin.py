@@ -255,7 +255,8 @@ class TestAdminLayoutEditConfig:
         # Then it succeeds
         def updated_image() -> None:
             flash_msg = journ_app_nav.driver.find_element(By.CSS_SELECTOR, ".flash")
-            assert "Image updated." in flash_msg.text
+            if not journ_app_nav.accept_languages:
+                assert "Image updated." in flash_msg.text
 
         journ_app_nav.nav_helper.wait_for(updated_image, timeout=20)
 
@@ -288,7 +289,8 @@ class TestAdminLayoutEditConfig:
         # Then it succeeds
         def test_alert_sent():
             flash_msg = journ_app_nav.driver.find_element(By.CSS_SELECTOR, ".flash")
-            assert "Test alert sent. Please check your email." in flash_msg.text
+            if not journ_app_nav.accept_languages:
+                assert "Test alert sent. Please check your email." in flash_msg.text
 
         journ_app_nav.nav_helper.wait_for(test_alert_sent)
 
