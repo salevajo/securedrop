@@ -33,6 +33,8 @@ class JournalistAppNavigator:
         self._journalist_app_base_url = journalist_app_base_url
         self.nav_helper = NavigationHelper(web_driver)
         self.driver = web_driver
+
+        # Some string-based tests check this to avoid failing on translated strings.
         self.accept_languages = accept_languages
 
     def got_expected_language(self, locale: str) -> None:
