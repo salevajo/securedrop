@@ -30,6 +30,9 @@ override_dh_auto_install:
 		/srv/redwood/redwood-*.whl
 	# Update paths to point to install destination
 	find ./debian/securedrop-app-code/ -type f -exec sed -i "s#$(shell pwd)/debian/securedrop-app-code##" {} \;
+	# Generage wsgi.load for apache
+	mkdir -p ./debian/securedrop-app-code/etc/apache2/mods-available
+	python3 ./debian/gen-mods.py > ./debian/securedrop-app-code/etc/apache2/mods-available/wsgi.load
 	dh_auto_install $@
 
 override_dh_auto_test:
