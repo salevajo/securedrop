@@ -62,10 +62,11 @@ def test_grsecurity_lock_file(host):
     Ensure system is rerunning a grsecurity kernel by testing for the
     `grsec_lock` file, which is automatically created by grsecurity.
     """
-    f = host.file("/proc/sys/kernel/grsecurity/grsec_lock")
-    assert f.mode == 0o600
-    assert f.user == "root"
-    assert f.size == 0
+    with host.sudo():
+        f = host.file("/proc/sys/kernel/grsecurity/grsec_lock")
+        assert f.mode == 0o600
+        assert f.user == "root"
+        assert f.size == 0
 
 
 def test_grsecurity_kernel_is_running(host):
