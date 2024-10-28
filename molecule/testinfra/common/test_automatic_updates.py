@@ -49,6 +49,8 @@ def test_sources_list(host, repo):
     Ensure the correct apt repositories are specified
     in the sources.list for apt.
     """
+    if host.system_info.codename != "focal":
+        pytest.skip("sources.list is only provisioned on focal")
     repo_config = repo.format(securedrop_target_platform=host.system_info.codename)
     f = host.file("/etc/apt/sources.list")
     assert f.is_file
@@ -56,6 +58,32 @@ def test_sources_list(host, repo):
     assert f.mode == 0o644
     repo_regex = f"^{re.escape(repo_config)}$"
     assert f.contains(repo_regex)
+
+
+def test_ubuntu_sources(host):
+    """
+    Ensure the correct apt repositories are specified
+    in the ubuntu.sources for apt.
+    """
+    distro = host.system_info.codename
+    if distro == "focal":
+        pytest.skip("sources.list is only provisioned on noble")
+    f = host.file("/etc/apt/sources.list.d/ubuntu.sources")
+    assert f.is_file
+    assert f.user == "root"
+    assert f.mode == 0o644
+    expected = f"""\
+URIs: http://archive.ubuntu.com/ubuntu/
+Suites: {distro} {distro}-updates
+Components: main universe restricted multiverse
+"""
+    assert f.contains(expected)
+    expected_security = f"""\
+URIs: http://security.ubuntu.com/ubuntu/
+Suites: {distro}-security
+Components: main universe restricted multiverse
+"""
+    assert f.contains(expected_security)
 
 
 apt_config_options = {
