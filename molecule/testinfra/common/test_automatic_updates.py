@@ -119,9 +119,11 @@ def test_unattended_upgrades_functional(host):
     """
     c = host.run("sudo unattended-upgrades --dry-run --debug")
     assert c.rc == 0
+    distro = host.system_info.codename
     expected_origins = (
-        "Allowed origins are: origin=Ubuntu,archive=focal, origin=Ubuntu,archive=focal-security"
-        ", origin=Ubuntu,archive=focal-updates, origin=SecureDrop,codename=focal"
+        f"Allowed origins are:"
+        f" origin=Ubuntu,archive={distro}, origin=Ubuntu,archive={distro}-security"
+        f", origin=Ubuntu,archive={distro}-updates, origin=SecureDrop,codename={distro}"
     )
     expected_result = (
         "No packages found that can be upgraded unattended and no pending auto-removals"
