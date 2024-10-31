@@ -110,7 +110,7 @@ def test_twofactor_disabled_on_tty(host):
         ("PasswordAuthentication", "no"),
         ("PubkeyAuthentication", "yes"),
         ("RSAAuthentication", "yes"),
-        ("AllowGroups", "ssh"),
+        ("AllowGroups", "sdssh"),
         ("AllowTcpForwarding", "no"),
         ("AllowAgentForwarding", "no"),
         ("PermitTunnel", "no"),
