@@ -104,3 +104,22 @@ def test_app_code_paths_missing(securedrop_app_code_contents: str, path: str):
     for line in securedrop_app_code_contents.splitlines():
         if line.endswith(path):
             pytest.fail(f"found {line}")
+
+
+def test_apparmor_conditional():
+    try:
+        path = [pkg for pkg in DEB_PATHS if pkg.name.startswith("securedrop-app-code")][0]
+    except IndexError:
+        raise RuntimeError("Unable to find securedrop-app-code package in build/ folder")
+    info = subprocess.check_output(["dpkg", "--info", path]).decode()
+    found = False
+    for line in info.splitlines():
+        if line.startswith(" Depends:"):
+            found = True
+            if UBUNTU_VERSION == "focal":
+                assert "apparmor (>=" not in line, "focal has no versioned apparmor dependency"
+            else:
+                assert "apparmor (>=" in line, "noble has versioned apparmor dependency"
+
+    print(info)
+    assert found, "Depends: line wasn't found"
