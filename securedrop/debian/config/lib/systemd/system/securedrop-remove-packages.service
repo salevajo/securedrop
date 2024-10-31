@@ -1,0 +1,9 @@
+[Unit]
+Description=Remove ufw if installed
+ConditionPathExists=/usr/sbin/ufw
+
+[Service]
+Type=oneshot
+Environment="DEBIAN_FRONTEND=noninteractive"
+ExecStart=/usr/bin/apt-get purge --yes ufw
+User=root
