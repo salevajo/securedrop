@@ -75,9 +75,8 @@ def test_swap_disabled(host):
     """
     hostname = host.check_output("hostname")
 
-    # Mon doesn't have swap disabled yet
     if hostname.startswith("mon"):
-        return True
+        pytest.skip("mon doesn't have swap disabled yet")
 
     c = host.check_output("swapon --summary")
     # A leading slash will indicate full path to a swapfile.
