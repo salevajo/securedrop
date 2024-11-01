@@ -81,6 +81,7 @@ def test_grsecurity_kernel_is_running(host):
     [
         ("kernel.grsecurity.grsec_lock", 1),
         ("kernel.grsecurity.rwxmap_logging", 0),
+        # set via securedrop-grsec (in kernel-builder)
         ("vm.heap_stack_gap", 1048576),
     ],
 )
