@@ -19,6 +19,8 @@ case "$1" in
     cp /opt/securedrop/20auto-upgrades /etc/apt/apt.conf.d/
     cp /opt/securedrop/50unattended-upgrades /etc/apt/apt.conf.d/
     cp /opt/securedrop/reboot-flag /etc/cron.d/
+    # Drop old cloud-init sshd_config if it still exists
+    rm -f /etc/ssh/sshd_config.d/50-cloud-init.conf
 
     # Disable fwupd-refresh (#6204)
     systemctl is-enabled fwupd-refresh.timer && systemctl disable fwupd-refresh.timer
