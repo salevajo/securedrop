@@ -1,8 +1,6 @@
 ---
 - name: Run the backup script (can take a while).
-  # Setting args inline (against project style conventions) to work around
-  # Ansible bug: https://github.com/ansible/ansible/issues/9693
-  command: /usr/bin/securedrop-app-backup.py chdir=/tmp
+  command: /usr/bin/securedrop-app-backup.py --dest /tmp
   # If there are a lot of submissions, this task could take a while.
   async: 3600
   poll: 10
