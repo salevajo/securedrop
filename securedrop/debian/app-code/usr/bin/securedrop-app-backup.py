@@ -1,7 +1,7 @@
-#!/opt/venvs/securedrop-app-code/bin/python
+#!/usr/bin/python3
 """
-This script is copied to the App server (to /tmp) and run by the Ansible playbook,
-typically via `securedrop-admin`.
+This script is invoked by the ansible playbook, typically via
+`securedrop-admin`. It is run as root on the app server.
 
 The backup file in the format sd-backup-$TIMESTAMP.tar.gz is then copied to the
 Admin Workstation by the playbook, and removed on the server. For further
