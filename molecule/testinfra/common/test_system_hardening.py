@@ -1,4 +1,5 @@
 import re
+import time
 
 import pytest
 import testutils
@@ -172,6 +173,29 @@ def test_iptables_packages(host):
     firewall config across reboots.
     """
     assert host.package("iptables-persistent").is_installed
+    assert not host.package("ufw").is_installed
+
+
+def test_package_removal(host):
+    """Test the securedrop-remove-packages service"""
+    if host.system_info.codename != "focal":
+        # ufw is uninstallable in noble because of the conflict
+        # with iptables-persistent
+        pytest.skip("only applicable/testable on focal")
+
+    with host.sudo():
+        if not host.package("ufw").is_installed:
+            cmd = host.run("apt-get install ufw --yes")
+            assert cmd.rc == 0
+        assert host.file("/usr/sbin/ufw").exists
+        # Trigger the service manually
+        cmd = host.run("systemctl start securedrop-remove-packages")
+        assert cmd.rc == 0
+        # Wait for the unit to run
+        while host.service("securedrop-remove-packages").is_running:
+            time.sleep(1)
+
+    assert not host.package("ufw").is_installed
 
 
 def test_snapd_absent(host):
