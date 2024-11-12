@@ -1,9 +1,10 @@
 [Unit]
-Description=Remove ufw if installed
-ConditionPathExists=/usr/sbin/ufw
+Description=Remove ufw/haveged if installed
+ConditionPathExists|=/usr/sbin/ufw
+ConditionPathExists|=/usr/sbin/haveged
 
 [Service]
 Type=oneshot
 Environment="DEBIAN_FRONTEND=noninteractive"
-ExecStart=/usr/bin/apt-get purge --yes ufw
+ExecStart=/usr/bin/apt-get purge --yes ufw haveged
 User=root
