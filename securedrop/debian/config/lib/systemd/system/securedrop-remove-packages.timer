@@ -1,5 +1,5 @@
 [Unit]
-Description=Remove ufw if installed
+Description=Remove ufw and haveged if installed
 
 [Timer]
 OnCalendar=daily
