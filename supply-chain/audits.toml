@@ -487,22 +487,15 @@ notes = "Rust Project member"
 
 [[trusted.sequoia-openpgp]]
 criteria = "safe-to-deploy"
-user-id = 33886 # Neal H. Walfield (nwalfield)
-start = "2022-11-18"
-end = "2024-04-10"
-notes = "Sequoia developer"
-
-[[trusted.sequoia-openpgp]]
-criteria = "safe-to-deploy"
 user-id = 33711 # Justus Winter (teythoon)
 start = "2019-03-14"
 end = "2024-12-12"
 notes = "Sequoia developer"
 
-[[trusted.sha1collisiondetection]]
+[[trusted.sequoia-openpgp]]
 criteria = "safe-to-deploy"
 user-id = 33886 # Neal H. Walfield (nwalfield)
-start = "2022-08-28"
+start = "2022-11-18"
 end = "2024-04-10"
 notes = "Sequoia developer"
 
@@ -518,6 +511,13 @@ criteria = "safe-to-deploy"
 user-id = 33711 # Justus Winter (teythoon)
 start = "2020-11-11"
 end = "2024-04-27"
+notes = "Sequoia developer"
+
+[[trusted.sha1collisiondetection]]
+criteria = "safe-to-deploy"
+user-id = 33886 # Neal H. Walfield (nwalfield)
+start = "2022-08-28"
+end = "2024-04-10"
 notes = "Sequoia developer"
 
 [[trusted.syn]]
