@@ -1,4 +1,5 @@
 import re
+import time
 
 import pytest
 import testutils
@@ -203,20 +204,26 @@ def test_apt_daily_upgrade_timer_schedule(host):
     assert "RandomizedDelayUSec=20m" in c.stdout
 
 
-def test_reboot_required_cron(host):
+def test_reboot_required_timer(host):
     """
     Unattended-upgrades does not reboot the system if the updates don't require it.
     However, we use daily reboots for SecureDrop to ensure memory is cleared periodically.
     Here, we ensure that reboot-required flag is dropped twice daily to ensure the system
     is rebooted every day at the scheduled time.
     """
-    f = host.file("/etc/cron.d/reboot-flag")
-    assert f.is_file
-    assert f.user == "root"
-    assert f.mode == 0o644
-
-    line = "^{}$".format(re.escape("0 */12 * * * root touch /var/run/reboot-required"))
-    assert f.contains(line)
+    f = host.service("securedrop-reboot-required.timer")
+    assert f.is_enabled
+    assert f.is_running
+    # Run the service itself to verify the file is created
+    with host.sudo():
+        if host.file("/var/run/reboot-required").exists:
+            cmd = host.run("rm /var/run/reboot-required")
+            assert cmd.rc == 0
+        cmd = host.run("systemctl start securedrop-reboot-required")
+        assert cmd.rc == 0
+        while host.service("securedrop-reboot-requried").is_running:
+            time.sleep(1)
+        assert host.file("/var/run/reboot-required").exists
 
 
 def test_all_packages_updated(host):
