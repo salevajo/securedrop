@@ -87,14 +87,10 @@ def _create_firefox_driver(
 ) -> webdriver.Firefox:
     logging.info("Creating Firefox web driver")
 
-    profile = webdriver.FirefoxProfile()
-    if accept_languages is not None:
-        profile.set_preference("intl.accept_languages", accept_languages)
-        profile.update_preferences()
-
     firefox_options = webdriver.FirefoxOptions()
     firefox_options.binary_location = _FIREFOX_PATH
-    firefox_options.profile = profile
+    if accept_languages is not None:
+        firefox_options.set_preference("intl.accept_languages", accept_languages)
 
     firefox_driver = None
     for i in range(_DRIVER_RETRY_COUNT):
