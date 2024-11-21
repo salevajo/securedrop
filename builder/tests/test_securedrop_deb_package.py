@@ -19,11 +19,11 @@ def securedrop_app_code_contents() -> str:
     """
     Returns the content listing of the securedrop-app-code Debian package.
     """
-    try:
-        path = [pkg for pkg in DEB_PATHS if pkg.name.startswith("securedrop-app-code")][0]
-    except IndexError:
-        raise RuntimeError("Unable to find securedrop-app-code package in build/ folder")
-    return subprocess.check_output(["dpkg-deb", "--contents", path]).decode()
+    for pkg in DEB_PATHS:
+        if pkg.name.startswith("securedrop-app-code") and "dbgsym" not in pkg.name:
+            return subprocess.check_output(["dpkg-deb", "--contents", pkg]).decode()
+
+    raise RuntimeError("Unable to find securedrop-app-code package in build/ folder")
 
 
 @pytest.mark.parametrize("deb", DEB_PATHS)
@@ -55,7 +55,10 @@ def test_deb_package_contains_expected_conffiles(deb: Path):
 
     The same applies to `securedrop-config` too.
     """
-    if not deb.name.startswith(("securedrop-app-code", "securedrop-config")):
+    if (
+        not deb.name.startswith(("securedrop-app-code", "securedrop-config"))
+        or "dbgsym" in deb.name
+    ):
         return
 
     with tempfile.TemporaryDirectory() as tmpdir:
