@@ -22,8 +22,6 @@
 
 - include_tasks: remove_unused_packages.yml
 
-- include_tasks: sysctl.yml
-
 - include_tasks: disable_swap.yml
 
 - include_tasks: remove_kernel_modules.yml

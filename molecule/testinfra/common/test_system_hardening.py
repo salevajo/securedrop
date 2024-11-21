@@ -31,6 +31,8 @@ def test_sysctl_options(host, sysctl_opt):
     """
     Ensure sysctl flags are set correctly. Most of these checks
     are hardening IPv4, which is appropriate due to the heavy use of Tor.
+
+    These are all set via securedrop-grsec (in kernel-builder).
     """
     with host.sudo():
         assert host.sysctl(sysctl_opt[0]) == sysctl_opt[1]
