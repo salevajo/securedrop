@@ -4,7 +4,7 @@ ConditionPathExists|=/usr/sbin/ufw
 ConditionPathExists|=/usr/sbin/haveged
 
 [Service]
-Type=oneshot
+Type=exec
 Environment="DEBIAN_FRONTEND=noninteractive"
 ExecStart=/usr/bin/apt-get purge --yes ufw haveged
 User=root
