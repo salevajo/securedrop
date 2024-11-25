@@ -26,3 +26,15 @@ unattended_upgrades_timer_overrides:
 daily_reboot_time: 4 # An integer between 0 and 23
 daily_update_time: "{{ (daily_reboot_time|int - 2) % 24 }}"
 daily_upgrade_time: "{{ (daily_reboot_time|int - 1) % 24 }}"
+
+securedrop_kernel_packages_to_remove:
+  - linux-virtual
+  - linux-generic
+  - 'linux-image-.*generic'
+
+resolvconf_target_filepath: /etc/resolv.conf
+
+securedrop_common_packages:
+  - iptables-persistent
+  - unattended-upgrades
+  - tmux

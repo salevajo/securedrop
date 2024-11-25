@@ -1,6 +1,4 @@
 ---
-- include_vars: "{{ ansible_distribution }}_{{ ansible_distribution_release }}.yml"
-
 - include_tasks: apt_sources.yml
 
 - include_tasks: apt_upgrade.yml
