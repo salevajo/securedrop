@@ -27,10 +27,9 @@ from tests.functional.pageslayout.utils import list_locales, save_static_data
 class TestSourceLayoutTorBrowser:
     def test_index_and_logout(self, locale, sd_servers):
         # Given a source user accessing the app from their browser
-        locale_with_commas = locale.replace("_", "-")
         with SourceAppNavigator.using_tor_browser_web_driver(
             source_app_base_url=sd_servers.source_app_base_url,
-            accept_languages=locale_with_commas,
+            accept_languages=locale,
         ) as navigator:
             # And they have disabled JS in their browser
             disable_js(navigator.driver)
