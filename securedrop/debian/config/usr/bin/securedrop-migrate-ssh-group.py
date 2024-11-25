@@ -21,7 +21,12 @@ def main() -> None:
         print(f"Creating group {DEST_GROUP}")
         subprocess.run(["groupadd", DEST_GROUP], check=True)
 
-    source_group_info = grp.getgrnam(SOURCE_GROUP)
+    try:
+        source_group_info = grp.getgrnam(SOURCE_GROUP)
+    except KeyError:
+        # Source group doesn't exist, probably a new install.
+        print(f"Group {SOURCE_GROUP} does not exist; stopping migration")
+        return
     source_users = source_group_info.gr_mem
     print(f"Need to migrate: {source_users}")
 
