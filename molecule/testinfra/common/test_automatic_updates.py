@@ -221,7 +221,7 @@ def test_reboot_required_timer(host):
             assert cmd.rc == 0
         cmd = host.run("systemctl start securedrop-reboot-required")
         assert cmd.rc == 0
-        while host.service("securedrop-reboot-requried").is_running:
+        while host.service("securedrop-reboot-required").is_running:
             time.sleep(1)
         assert host.file("/var/run/reboot-required").exists
 
