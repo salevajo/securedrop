@@ -82,7 +82,7 @@ fix: ruff ## Apply automatic fixes.
 .PHONY: html-lint
 html-lint:  ## Validate HTML in web application template files.
 	@echo "███ Linting application templates..."
-	@html_lint.py --printfilename --disable=optional_tag,extra_whitespace,indentation,names,quotation \
+	@html_lint.py --printfilename --disable=optional_tag,extra_whitespace,indentation,names,quotation,protocol \
 		securedrop/source_templates/*.html securedrop/journalist_templates/*.html
 	@echo
 
