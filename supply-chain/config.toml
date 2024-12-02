@@ -39,6 +39,9 @@ notes = "Haiku OS-only"
 criteria = []
 notes = "WASM-only"
 
+[policy.noble-migration]
+criteria = "safe-to-run"
+
 [policy.redox_syscall]
 criteria = []
 notes = "Redox OS-only"
