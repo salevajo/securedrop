@@ -146,8 +146,9 @@ fn estimate_backup_size() -> Result<u64> {
 /// conservatively), and not take up more than 90% of the disk.
 fn check_free_space() -> Result<bool> {
     // Also no simple bindings to get disk size, so shell out to df
+    // Explicitly specify -B1 for bytes (not kilobytes)
     let output = process::Command::new("df")
-        .arg("/")
+        .args(["-B1", "/"])
         .output()
         .context("spawning df failed")?;
     if !output.status.success() {
@@ -168,7 +169,7 @@ fn check_free_space() -> Result<bool> {
 
     if parsed.free < total_needs {
         println!(
-            "free space: not enough free space, have {}, need {total_needs}",
+            "free space: not enough free space, have {} free bytes, need {total_needs} bytes",
             parsed.free
         );
         Ok(false)
@@ -178,6 +179,7 @@ fn check_free_space() -> Result<bool> {
     }
 }
 
+/// Sizes are in bytes
 struct DfOutput {
     total: u64,
     free: u64,
@@ -345,15 +347,14 @@ mod tests {
 
     #[test]
     fn test_parse_df_output() {
-        // Taken from my Qubes VM, but the output of df is the same on Ubuntu
         let output = parse_df_output(
-            "Filesystem         1K-blocks     Used Available Use% Mounted on
-/dev/mapper/dmroot  20260052 10727468   8478072  56% /
+            "Filesystem                           1B-blocks       Used   Available Use% Mounted on
+/dev/mapper/ubuntu--vg-ubuntu--lv 105089261568 8573784064 91129991168   9% /
 ",
         )
         .unwrap();
 
-        assert_eq!(output.total, 20260052);
-        assert_eq!(output.free, 8478072);
+        assert_eq!(output.total, 105089261568);
+        assert_eq!(output.free, 91129991168);
     }
 }
