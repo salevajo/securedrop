@@ -64,5 +64,5 @@ jobs:
           for pkg in ossec-agent ossec-server securedrop-config securedrop-keyring securedrop-ossec-agent securedrop-ossec-server
           do
               echo "Checking ${pkg}..."
-              diffoscope ${{ matrix.ubuntu_version }}-one/${pkg}*.deb ${{ matrix.ubuntu_version }}-two/${pkg}*.deb
+              diffoscope ${{ matrix.ubuntu_version }}-one/${pkg}_*.deb ${{ matrix.ubuntu_version }}-two/${pkg}_*.deb
           done
