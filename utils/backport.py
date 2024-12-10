@@ -16,6 +16,12 @@ parser = argparse.ArgumentParser(description="Backport a PR")
 parser.add_argument("pr", type=int, help="the # of the PR to backport")
 parser.add_argument("version", help="the release version to target with the backport")
 parser.add_argument("remote", default="origin", help="the git remote to use (defaults to origin)")
+parser.add_argument(
+    "--fetch",
+    action=argparse.BooleanOptionalAction,
+    default=True,
+    help="do (default) or don't fetch from this remote first",
+)
 parser.add_argument("--skip", default=[], action="append", help="don't cherry-pick these commits")
 args = parser.parse_args()
 
@@ -37,7 +43,8 @@ print(f'Backporting {len(commit_hashes)}/{len(commits)} commits from "{title}"')
 branch = f"backport-{args.pr}"
 base = f"release/{args.version}"
 remote = args.remote
-subprocess.check_call(["git", "fetch", remote])
+if args.fetch:
+    subprocess.check_call(["git", "fetch", remote])
 subprocess.check_call(["git", "checkout", "-b", branch, f"{remote}/{base}"])
 subprocess.check_call(["git", "cherry-pick", "-x"] + commit_hashes)
 if input("OK to push and create PR? [y/N]").lower() != "y":
@@ -59,7 +66,7 @@ Backport of #{args.pr}.
 
 * [ ] CI is passing
 * [ ] base is `{base}`
-* [ ] Only contains changes from #{args.pr} #{skip_message}
+* [ ] Only contains changes from #{args.pr} {skip_message}
 """
 print(body)
 
