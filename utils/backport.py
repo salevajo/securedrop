@@ -66,7 +66,7 @@ Backport of #{args.pr}.
 
 * [ ] CI is passing
 * [ ] base is `{base}`
-* [ ] Only contains changes from #{args.pr} #{skip_message}
+* [ ] Only contains changes from #{args.pr} {skip_message}
 """
 print(body)
 
