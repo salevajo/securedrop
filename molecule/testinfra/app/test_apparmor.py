@@ -103,5 +103,10 @@ def test_aa_no_denies_in_syslog(host):
     found = []
     for line in lines:
         if 'apparmor="DENIED"' in line:
+            if 'profile="ubuntu_pro_apt_news"' in line:
+                # This failure is a known bug in Ubuntu that happens before SD
+                # is installed and disables ubuntu-pro stuff. See
+                # <https://github.com/freedomofpress/securedrop/issues/7385>.
+                continue
             found.append(line)
     assert found == []
