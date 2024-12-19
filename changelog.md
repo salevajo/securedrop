@@ -1,5 +1,9 @@
 # Changelog
 
+## 2.12.0~rc1
+
+
+
 ## 2.11.1
 
 * Modify the `securedrop-noble-migration-check` program to avoid triggering
