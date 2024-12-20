@@ -1,10 +1,7 @@
-import difflib
-import os
 import warnings
 
 import pytest
 import testutils
-from jinja2 import Template
 
 sdvars = testutils.securedrop_test_vars
 testinfra_hosts = [sdvars.app_hostname, sdvars.monitor_hostname]
@@ -95,6 +92,52 @@ def test_grsecurity_sysctl_options(host, sysctl_opt):
         assert host.sysctl(sysctl_opt[0]) == sysctl_opt[1]
 
 
+# Versions of paxtest newer than 0.9.12 or so will report
+# "Vulnerable" on memcpy tests, see details in
+# https://github.com/freedomofpress/securedrop/issues/1039
+PAXTEST_FOCAL = """\
+Executable anonymous mapping             : Killed
+Executable bss                           : Killed
+Executable data                          : Killed
+Executable heap                          : Killed
+Executable stack                         : Killed
+Executable shared library bss            : Killed
+Executable shared library data           : Killed
+Executable anonymous mapping (mprotect)  : Killed
+Executable bss (mprotect)                : Killed
+Executable data (mprotect)               : Killed
+Executable heap (mprotect)               : Killed
+Executable stack (mprotect)              : Killed
+Executable shared library bss (mprotect) : Killed
+Executable shared library data (mprotect): Killed
+Return to function (strcpy)              : paxtest: return address contains a NULL byte.
+Return to function (memcpy)              : Vulnerable
+Return to function (strcpy, PIE)         : paxtest: return address contains a NULL byte.
+Return to function (memcpy, PIE)         : Vulnerable
+"""
+
+PAXTEST_NOBLE = """\
+Executable anonymous mapping             : Killed
+Executable bss                           : Killed
+Executable data                          : Killed
+Executable heap                          : Killed
+Executable stack                         : Killed
+Executable shared library bss            : Killed
+Executable shared library data           : Killed
+Executable anonymous mapping (mprotect)  : Killed
+Executable bss (mprotect)                : Killed
+Executable data (mprotect)               : Killed
+Executable heap (mprotect)               : Killed
+Executable stack (mprotect)              : Killed
+Executable shared library bss (mprotect) : Killed
+Executable shared library data (mprotect): Killed
+Return to function (strcpy)              : paxtest: return address contains a NULL byte.
+Return to function (memcpy)              : Killed
+Return to function (strcpy, PIE)         : paxtest: return address contains a NULL byte.
+Return to function (memcpy, PIE)         : Killed
+"""
+
+
 def test_grsecurity_paxtest(host):
     """
     Check that paxtest reports the expected mitigations. These are
@@ -102,6 +145,8 @@ def test_grsecurity_paxtest(host):
     memcpy ones. Only newer versions of paxtest will fail the latter,
     regardless of kernel.
     """
+    if host.system_info.codename == "noble":
+        pytest.skip("FIXME: paxtest is returning unclear output on noble")
     if not host.exists("/usr/bin/paxtest"):
         warnings.warn("Installing paxtest to run kernel tests")
         with host.sudo():
@@ -112,29 +157,27 @@ def test_grsecurity_paxtest(host):
     try:
         with host.sudo():
             # Log to /tmp to avoid cluttering up /root.
-            paxtest_cmd = "paxtest blackhat /tmp/paxtest.log"
-            # Select only predictably formatted lines; omit
-            # the guesses, since the number of bits can vary
-            paxtest_cmd += " | grep -P '^(Executable|Return)'"
-            paxtest_results = host.check_output(paxtest_cmd)
+            paxtest_results = host.check_output("paxtest blackhat /tmp/paxtest.log")
 
-        paxtest_template_path = f"{os.path.dirname(os.path.abspath(__file__))}/paxtest_results.j2"
+        # Select only predictably formatted lines; omit
+        # the guesses, since the number of bits can vary
+        paxtest_results = (
+            "\n".join(
+                line
+                for line in paxtest_results.split("\n")
+                if line.startswith(("Executable", "Return"))
+            )
+            + "\n"
+        )
+        print("paxtest results:\n" + paxtest_results)
 
-        memcpy_result = "Killed"
-        # Versions of paxtest newer than 0.9.12 or so will report
-        # "Vulnerable" on memcpy tests, see details in
-        # https://github.com/freedomofpress/securedrop/issues/1039
         if host.system_info.codename == "focal":
-            memcpy_result = "Vulnerable"
-        with open(paxtest_template_path) as f:
-            paxtest_template = Template(f.read().rstrip())
-            paxtest_expected = paxtest_template.render(memcpy_result=memcpy_result)
+            paxtest_expected = PAXTEST_FOCAL
+        elif host.system_info.codename == "noble":
+            paxtest_expected = PAXTEST_NOBLE
+        else:
+            pytest.fail(f"Unexpected codename {host.system_info.codename}")
 
-        # The stdout prints here will only be displayed if the test fails
-        for paxtest_diff in difflib.context_diff(
-            paxtest_expected.split("\n"), paxtest_results.split("\n")
-        ):
-            print(paxtest_diff)
         assert paxtest_results == paxtest_expected
     finally:
         with host.sudo():
