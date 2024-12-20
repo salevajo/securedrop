@@ -43,3 +43,4 @@ translate-toolkit
 urllib3>=1.26.5
 uv
 yamllint
+zizmor
