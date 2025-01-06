@@ -105,7 +105,10 @@ def test_grsecurity_paxtest(host):
     if not host.exists("/usr/bin/paxtest"):
         warnings.warn("Installing paxtest to run kernel tests")
         with host.sudo():
-            host.run("apt-get update && apt-get install -y paxtest")
+            # Stop u-u if it's running, otherwise it'll hold the dpkg lock
+            host.run("systemctl stop unattended-upgrades")
+            cmd = host.run("apt-get update && apt-get install -y paxtest")
+            assert cmd.rc == 0
     try:
         with host.sudo():
             # Log to /tmp to avoid cluttering up /root.
