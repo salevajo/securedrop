@@ -87,7 +87,7 @@ def make_blueprint() -> Blueprint:
                 )
             return redirect(url_for("admin.manage_config") + "#config-logoimage")
         else:
-            for errors in list(logo_form.errors.values()):
+            for errors in logo_form.errors.values():
                 for error in errors:
                     flash(error, "logo-error")
             return render_template(
