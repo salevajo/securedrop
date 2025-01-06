@@ -255,3 +255,10 @@ def test_kernel_boot_options(host):
     assert "noefi" in boot_opts
     if host.system_info.codename == "focal":
         assert "ipv6.disable=1" in boot_opts
+
+
+def test_ipv6_disabled(host):
+    """
+    Verify that IPv6 is disabled at the kernel level
+    """
+    assert not host.file("/proc/sys/net/ipv6").exists
