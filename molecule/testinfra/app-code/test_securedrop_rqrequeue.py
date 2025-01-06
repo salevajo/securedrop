@@ -17,6 +17,7 @@ def test_securedrop_rqrequeue_service(host):
             "Wants=redis-server.service",
             "",
             "[Service]",
+            "Type=exec",
             f'Environment=PYTHONPATH="{securedrop_test_vars.securedrop_code}:{securedrop_test_vars.securedrop_venv_site_packages}"',
             f"ExecStart={securedrop_test_vars.securedrop_venv_bin}/python /var/www/securedrop/"
             "scripts/rqrequeue --interval 60",
