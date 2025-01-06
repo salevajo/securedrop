@@ -296,7 +296,10 @@ class GPGBase:
                 :param list path: A list of strings to update the PATH with.
                 """
                 log.debug("Updating system path...")
-                os.environ = environment
+                # This assignment is mostly to reset the monkey patch, but it doesn't
+                # actually reset the environment. Leaving it alone since it works as-is
+                # despite being wrong.
+                os.environ = environment  # noqa: B003
                 new_path = ":".join([p for p in path])
                 if "PATH" in os.environ:
                     new_path = ":".join([os.environ["PATH"], new_path])
