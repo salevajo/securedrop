@@ -177,8 +177,8 @@ def make_blueprint() -> Blueprint:
                 ),
                 "success",
             )
-        finally:
-            return redirect(url_for("col.col", filesystem_id=g.filesystem_id))
+
+        return redirect(url_for("col.col", filesystem_id=g.filesystem_id))
 
     @view.route("/bulk", methods=("POST",))
     def bulk() -> Union[str, werkzeug.Response]:

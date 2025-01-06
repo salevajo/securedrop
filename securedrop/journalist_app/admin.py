@@ -85,8 +85,7 @@ def make_blueprint() -> Blueprint:
                     gettext("Unable to process the image file. Please try another one."),
                     "logo-error",
                 )
-            finally:
-                return redirect(url_for("admin.manage_config") + "#config-logoimage")
+            return redirect(url_for("admin.manage_config") + "#config-logoimage")
         else:
             for errors in list(logo_form.errors.values()):
                 for error in errors:
