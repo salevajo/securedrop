@@ -44,7 +44,7 @@ class UpgradeTester:
 
     def load_data(self):
         with self.app.app_context():
-            for i in range(self.source_count):
+            for _i in range(self.source_count):
                 self.add_source()
 
             self.original_sources = {
@@ -52,7 +52,7 @@ class UpgradeTester:
             }
 
             for s in self.original_sources.values():
-                for i in range(random.randint(0, 3)):
+                for _i in range(random.randint(0, 3)):
                     add_submission(s.id)
 
                 self.source_submissions[s.id] = db.engine.execute(
@@ -142,7 +142,7 @@ class DowngradeTester:
 
     def load_data(self):
         with self.app.app_context():
-            for i in range(self.source_count):
+            for _i in range(self.source_count):
                 self.add_source()
 
             self.original_sources = {
@@ -150,7 +150,7 @@ class DowngradeTester:
             }
 
             for s in self.original_sources.values():
-                for i in range(random.randint(0, 3)):
+                for _i in range(random.randint(0, 3)):
                     add_submission(s.id)
 
                 self.source_submissions[s.id] = db.engine.execute(

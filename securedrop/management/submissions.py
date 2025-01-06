@@ -20,7 +20,7 @@ def find_disconnected_db_submissions(path: str) -> List[Submission]:
     submissions = db.session.query(Submission).order_by(Submission.id, Submission.filename).all()
 
     files_in_fs = {}
-    for directory, subdirs, files in os.walk(path):
+    for directory, _subdirs, files in os.walk(path):
         for f in files:
             files_in_fs[f] = os.path.abspath(os.path.join(directory, f))
 
@@ -89,7 +89,7 @@ def find_disconnected_fs_submissions(path: str) -> List[str]:
     files_in_db.update({r.filename: True for r in replies})
 
     files_in_fs = {}
-    for directory, subdirs, files in os.walk(path):
+    for directory, _subdirs, files in os.walk(path):
         for f in files:
             files_in_fs[f] = os.path.abspath(os.path.join(directory, f))
 

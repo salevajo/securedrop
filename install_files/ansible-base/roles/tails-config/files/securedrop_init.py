@@ -80,7 +80,7 @@ if not os.path.isdir(path_onion_auth_dir):
 os.chmod(path_onion_auth_dir, 0o700)
 os.chown(path_onion_auth_dir, debian_tor_uid, debian_tor_gid)
 
-for key, f in paths_v3_authfiles.items():
+for f in paths_v3_authfiles.values():
     if os.path.isfile(f):
         filename = os.path.basename(f)
         new_f = os.path.join(path_onion_auth_dir, filename)

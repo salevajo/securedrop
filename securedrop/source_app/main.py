@@ -197,7 +197,7 @@ def make_blueprint(config: SecureDropConfig) -> Blueprint:
         allow_document_uploads = InstanceConfig.get_default().allow_document_uploads
         form = SubmissionForm()
         if not form.validate():
-            for field, errors in form.errors.items():
+            for errors in form.errors.values():
                 for error in errors:
                     flash_msg("error", None, error)
             return redirect(url_for("main.lookup"))

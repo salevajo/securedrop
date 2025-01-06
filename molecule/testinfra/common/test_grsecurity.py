@@ -103,7 +103,7 @@ def test_grsecurity_paxtest(host):
     regardless of kernel.
     """
     if not host.exists("/usr/bin/paxtest"):
-        warnings.warn("Installing paxtest to run kernel tests")
+        warnings.warn("Installing paxtest to run kernel tests", stacklevel=1)
         with host.sudo():
             host.run("apt-get update && apt-get install -y paxtest")
     try:

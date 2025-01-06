@@ -7,6 +7,8 @@ line-length = 100
 extend-include = ["securedrop/scripts/*"]
 [tool.ruff.lint]
 select = [
+    # flake8-bugbear
+    "B",
     # pycodestyle errors
     "E",
     # pyflakes
@@ -37,6 +39,8 @@ select = [
     "RUF100",
 ]
 ignore = [
+    # too many raise within except without `from`
+    "B904",
     # incompatible with sqlalchemy https://github.com/astral-sh/ruff/issues/4560
     "E712",
     # code complexity checks that we fail

@@ -100,7 +100,7 @@ class GPGMeta(type):
             # Otherwise to _agent_proc will be saved not "gpg-agent" process buth an other.
             if ownership_match:
                 log.debug("Effective UIDs of this process and gpg-agent match")
-                setattr(cls, "_agent_proc", proc)
+                cls._agent_proc = proc
                 return True
 
         return False

@@ -18,7 +18,7 @@ RE_REMOVE = re.compile(r"^(state|diff)\.\d+$")
 def main() -> None:
     cutoff_date = datetime.now() - timedelta(days=KEEP_DAYS)
 
-    for root, dirs, files in os.walk(OSSEC_DIFFS):
+    for root, _dirs, files in os.walk(OSSEC_DIFFS):
         for file in files:
             if RE_REMOVE.match(file):
                 file_path = os.path.join(root, file)

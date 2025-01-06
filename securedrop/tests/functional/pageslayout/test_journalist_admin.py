@@ -86,7 +86,7 @@ class TestAdminLayoutAddAndEditUser:
             hotp_reset_button = journ_app_nav.driver.find_elements(By.ID, "reset-two-factor-hotp")[
                 0
             ]
-            hotp_reset_button.location_once_scrolled_into_view
+            assert hotp_reset_button.location_once_scrolled_into_view
             ActionChains(journ_app_nav.driver).move_to_element(hotp_reset_button).perform()
 
             time.sleep(1)
@@ -163,7 +163,7 @@ class TestAdminLayoutAddAndEditUser:
             totp_reset_button = journ_app_nav.driver.find_elements(
                 By.CSS_SELECTOR, "#button-reset-two-factor-totp"
             )[0]
-            totp_reset_button.location_once_scrolled_into_view
+            assert totp_reset_button.location_once_scrolled_into_view
             ActionChains(journ_app_nav.driver).move_to_element(totp_reset_button).perform()
 
             time.sleep(1)
@@ -196,7 +196,7 @@ class TestAdminLayoutAddAndEditUser:
         journ_app_nav: JournalistAppNavigator, navigation_step: Callable, button_to_click: str
     ) -> None:
         """Clicking on Selenium alerts can be flaky. We need to retry them if they timeout."""
-        for i in range(15):
+        for _i in range(15):
             try:
                 try:
                     # This is the button we click to trigger the alert.

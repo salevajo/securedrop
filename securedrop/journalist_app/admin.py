@@ -88,7 +88,7 @@ def make_blueprint() -> Blueprint:
             finally:
                 return redirect(url_for("admin.manage_config") + "#config-logoimage")
         else:
-            for field, errors in list(logo_form.errors.items()):
+            for errors in list(logo_form.errors.values()):
                 for error in errors:
                     flash(error, "logo-error")
             return render_template(
@@ -118,7 +118,7 @@ def make_blueprint() -> Blueprint:
             flash(gettext("Preferences saved."), "submission-preferences-success")
             return redirect(url_for("admin.manage_config") + "#config-preventuploads")
         else:
-            for field, errors in list(form.errors.items()):
+            for errors in list(form.errors.values()):
                 for error in errors:
                     flash(
                         gettext("Preferences not updated.") + " " + error,
@@ -139,7 +139,7 @@ def make_blueprint() -> Blueprint:
                 flash(gettext("Failed to update organization name."), "org-name-error")
             return redirect(url_for("admin.manage_config") + "#config-orgname")
         else:
-            for field, errors in list(form.errors.items()):
+            for errors in list(form.errors.values()):
                 for error in errors:
                     flash(error, "org-name-error")
         return redirect(url_for("admin.manage_config") + "#config-orgname")
