@@ -14,6 +14,8 @@ jobs:
       GOOGLE_CREDENTIALS: ${{ secrets.GOOGLE_CREDENTIALS }}
     steps:
       - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
       - name: Run staging tests on GCE
         run: |
           make ci-go

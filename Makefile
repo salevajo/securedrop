@@ -110,10 +110,16 @@ yamllint:  ## Lint YAML files (does not validate syntax!).
 	@yamllint --strict .
 	@echo
 
+.PHONY: zizmor
+zizmor:  ## Lint GitHub Actions workflows.
+	@echo "███ Linting GitHub Actions workflows..."
+	@zizmor .
+	@echo
+
 # While the order mostly doesn't matter here, keep "check-ruff" first, since it
 # gives the broadest coverage and runs (and therefore fails) fastest.
 .PHONY: lint
-lint: check-ruff ansible-config-lint app-lint html-lint shellcheck typelint yamllint check-strings check-supported-locales check-desktop-files ## Runs all lint checks
+lint: check-ruff ansible-config-lint app-lint html-lint shellcheck typelint yamllint zizmor check-strings check-supported-locales check-desktop-files ## Runs all lint checks
 
 .PHONY: safety
 safety:  ## Run `safety check` to check python dependencies for vulnerabilities.
