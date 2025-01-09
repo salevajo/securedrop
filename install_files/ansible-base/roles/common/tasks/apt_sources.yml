@@ -24,7 +24,7 @@
 # this is an empty file with a comment pointing to ubuntu.sources.
 # On upgrade from focal, we're deleting this file.
 - name: Remove obsolete sources.list (noble)
-  template:
+  file:
     dest: /etc/apt/sources.list
     state: absent
   when: ansible_distribution_release != "focal"

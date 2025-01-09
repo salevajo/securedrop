@@ -259,7 +259,7 @@ demo-landing-page: ## Serve the landing page for the SecureDrop demo
 .PHONY: staging
 staging:  ## Create a local staging environment in virtual machines (Focal)
 	@echo "███ Creating staging environment on Ubuntu Focal..."
-	@$(SDROOT)/devops/scripts/create-staging-env focal
+	@$(SDROOT)/devops/scripts/create-staging-env
 	@echo
 
 .PHONY: testinfra

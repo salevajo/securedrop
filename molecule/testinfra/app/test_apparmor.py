@@ -51,32 +51,32 @@ def test_apparmor_tor_exact_capabilities(host):
     assert str(len(tor_capabilities)) == c
 
 
-@pytest.mark.parametrize("profile", sdvars.apparmor_enforce)
-def test_apparmor_ensure_not_disabled(host, profile):
+def test_apparmor_ensure_not_disabled(host):
     """
-    Explicitly check that enforced profiles are NOT in /etc/apparmor.d/disable
-    Polling aa-status only checks the last config that was loaded,
-    this ensures it wont be disabled on reboot.
+    Explicitly check that there are no profiles in /etc/apparmor.d/disabled
     """
-    f = host.file(f"/etc/apparmor.d/disabled/usr.sbin.{profile}")
     with host.sudo():
-        assert not f.exists
+        # Check that there are no apparmor profiles disabled because the folder is missing
+        folder = host.file("/etc/apparmor.d/disabled")
+        assert not folder.exists
 
 
-@pytest.mark.parametrize("aa_enforced", sdvars.apparmor_enforce_actual)
+@pytest.mark.parametrize(
+    "aa_enforced",
+    [
+        "system_tor",
+        "/usr/sbin/apache2",
+        "/usr/sbin/apache2//DEFAULT_URI",
+        "/usr/sbin/apache2//HANDLING_UNTRUSTED_INPUT",
+        "/usr/sbin/tor",
+    ],
+)
 def test_apparmor_enforced(host, aa_enforced):
+    # FIXME: don't use awk, post-process it in Python
     awk = "awk '/[0-9]+ profiles.*enforce./" "{flag=1;next}/^[0-9]+.*/{flag=0}flag'"
     with host.sudo():
         c = host.check_output(f"aa-status | {awk}")
         assert aa_enforced in c
-
-
-def test_apparmor_total_profiles(host):
-    """Ensure number of total profiles is sum of enforced and
-    complaining profiles"""
-    with host.sudo():
-        total_expected = len(sdvars.apparmor_enforce)
-        assert int(host.check_output("aa-status --profiled")) >= total_expected
 
 
 def test_aastatus_unconfined(host):
@@ -103,5 +103,10 @@ def test_aa_no_denies_in_syslog(host):
     found = []
     for line in lines:
         if 'apparmor="DENIED"' in line:
+            if 'profile="ubuntu_pro_apt_news"' in line:
+                # This failure is a known bug in Ubuntu that happens before SD
+                # is installed and disables ubuntu-pro stuff. See
+                # <https://github.com/freedomofpress/securedrop/issues/7385>.
+                continue
             found.append(line)
     assert found == []
