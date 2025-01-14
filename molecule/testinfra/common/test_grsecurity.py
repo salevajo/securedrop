@@ -1,3 +1,4 @@
+import time
 import warnings
 
 import pytest
@@ -150,10 +151,25 @@ def test_grsecurity_paxtest(host):
     if not host.exists("/usr/bin/paxtest"):
         warnings.warn("Installing paxtest to run kernel tests", stacklevel=1)
         with host.sudo():
-            # Stop u-u if it's running, otherwise it'll hold the dpkg lock
+            # Stop u-u if it's running
             host.run("systemctl stop unattended-upgrades")
-            cmd = host.run("apt-get update && apt-get install -y paxtest")
-            assert cmd.rc == 0
+            assert host.run("apt-get update").rc == 0
+            tries = 0
+            while not host.exists("/usr/bin/paxtest"):
+                cmd = host.run("apt-get install --yes paxtest")
+                if cmd.rc == 0:
+                    continue
+
+                if "Could not get lock /var/lib/dpkg/lock-frontend" in cmd.stderr:
+                    tries += 1
+                    if tries > 5:
+                        # Give up, this assertion will cause the test to fail
+                        assert cmd.rc == 0
+                    warnings.warn(
+                        f"Installing paxtest failed, retrying in 10 seconds (retry #{tries})",
+                        stacklevel=1,
+                    )
+                    time.sleep(10)
     try:
         with host.sudo():
             # Log to /tmp to avoid cluttering up /root.
