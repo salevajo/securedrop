@@ -33,10 +33,15 @@ def firefox_web_driver(request) -> WebDriver:  # type: ignore
         yield web_driver
 
 
-# Function-scoped so that tests can be run in parallel if needed
-@pytest.fixture
-def tor_browser_web_driver() -> WebDriver:  # type: ignore
-    with get_web_driver(web_driver_type=WebDriverTypeEnum.TOR_BROWSER) as web_driver:
+# Function-scoped so that tests can be run in parallel if needed.  The fixture
+# needs to know the locale at setup time, so we do that parameterization here
+# rather than at the test level.
+@pytest.fixture(params=get_test_locales(default_locale=None))
+def tor_browser_web_driver(request) -> WebDriver:  # type: ignore
+    locale = request.param.replace("_", "-")
+    with get_web_driver(
+        web_driver_type=WebDriverTypeEnum.TOR_BROWSER, accept_languages=locale
+    ) as web_driver:
         yield web_driver
 
 
