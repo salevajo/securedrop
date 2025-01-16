@@ -260,7 +260,7 @@ def _helper_test_reply(journalist_app, source_app, test_journo, test_reply):
         login_journalist(
             app, test_journo["username"], test_journo["password"], test_journo["otp_secret"]
         )
-        for i in range(2):
+        for _i in range(2):
             resp = app.post(
                 "/reply",
                 data=dict(filesystem_id=filesystem_id, message=test_reply),

@@ -148,7 +148,7 @@ def test_grsecurity_paxtest(host):
     if host.system_info.codename == "noble":
         pytest.skip("FIXME: paxtest is returning unclear output on noble")
     if not host.exists("/usr/bin/paxtest"):
-        warnings.warn("Installing paxtest to run kernel tests")
+        warnings.warn("Installing paxtest to run kernel tests", stacklevel=1)
         with host.sudo():
             # Stop u-u if it's running, otherwise it'll hold the dpkg lock
             host.run("systemctl stop unattended-upgrades")

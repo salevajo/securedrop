@@ -75,7 +75,7 @@ class TestJournalistLayoutAccount:
 
         # 2FA reset buttons show a tooltip with explanatory text on hover.
         # Also, confirm the text on the tooltip is the correct one.
-        reset_button.location_once_scrolled_into_view
+        assert reset_button.location_once_scrolled_into_view
         ActionChains(journ_app_nav.driver).move_to_element(reset_button).perform()
 
         def explanatory_tooltip_is_correct() -> None:

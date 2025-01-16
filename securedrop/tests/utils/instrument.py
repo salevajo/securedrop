@@ -71,7 +71,7 @@ class InstrumentedApp:
         """
         used_templates = []
 
-        for template, context in self.templates:
+        for template, _context in self.templates:
             if getattr(template, tmpl_name_attribute) == name:
                 return True
 
@@ -92,7 +92,7 @@ class InstrumentedApp:
 
         :param name: name of variable
         """
-        for template, context in self.templates:
+        for _template, context in self.templates:
             if name in context:
                 return context[name]
         raise ContextVariableDoesNotExist

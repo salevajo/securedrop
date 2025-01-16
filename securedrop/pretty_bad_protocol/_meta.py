@@ -100,7 +100,7 @@ class GPGMeta(type):
             # Otherwise to _agent_proc will be saved not "gpg-agent" process buth an other.
             if ownership_match:
                 log.debug("Effective UIDs of this process and gpg-agent match")
-                setattr(cls, "_agent_proc", proc)
+                cls._agent_proc = proc
                 return True
 
         return False
@@ -296,7 +296,9 @@ class GPGBase:
                 :param list path: A list of strings to update the PATH with.
                 """
                 log.debug("Updating system path...")
-                os.environ = environment
+                # This assignment doesn't reset the environment, but it does reset the monkey-patch
+                # as intended. Leaving as-is from upstream.
+                os.environ = environment  # noqa: B003
                 new_path = ":".join([p for p in path])
                 if "PATH" in os.environ:
                     new_path = ":".join([os.environ["PATH"], new_path])

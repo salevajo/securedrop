@@ -73,7 +73,7 @@ class TestSubmitAndRetrieveFile:
 
         def confirm_displayed():
             confirm_dialog = navigator.driver.find_element(By.ID, confirm_dialog_id)
-            confirm_dialog.location_once_scrolled_into_view
+            assert confirm_dialog.location_once_scrolled_into_view
             assert confirm_dialog.is_displayed()
 
         navigator.nav_helper.wait_for(confirm_displayed)

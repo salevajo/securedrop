@@ -198,7 +198,7 @@ class JournalistAppNavigator:
             lambda: expected_conditions.element_to_be_clickable((By.ID, "delete-selected"))
         )
         confirm_btn = self.driver.find_element(By.ID, "delete-selected")
-        confirm_btn.location_once_scrolled_into_view
+        assert confirm_btn.location_once_scrolled_into_view
         ActionChains(self.driver).move_to_element(confirm_btn).click().perform()
 
     def get_submission_checkboxes_on_current_page(self):
@@ -219,7 +219,7 @@ class JournalistAppNavigator:
             lambda: expected_conditions.element_to_be_clickable((By.ID, "delete-selected"))
         )
         confirm_btn = self.driver.find_element(By.ID, "delete-selected")
-        confirm_btn.location_once_scrolled_into_view
+        assert confirm_btn.location_once_scrolled_into_view
         ActionChains(self.driver).move_to_element(confirm_btn).click().perform()
 
     def journalist_sees_link_to_admin_page(self) -> bool:

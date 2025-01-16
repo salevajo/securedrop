@@ -328,7 +328,7 @@ class TestAdminInterfaceEditAndDeleteUser:
 
         # When the admin deletes the second journalist
         journ_app_nav.admin_visits_admin_interface()
-        for i in range(15):
+        for _i in range(15):
             try:
                 journ_app_nav.nav_helper.safe_click_by_css_selector(".delete-user a")
                 journ_app_nav.nav_helper.wait_for(

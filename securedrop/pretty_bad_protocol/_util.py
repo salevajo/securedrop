@@ -308,7 +308,7 @@ def _is_file(filename):  # type: ignore[no-untyped-def]
         if filename == "-":
             log.debug("Got '-' for filename, assuming sys.stdin...")
             return True
-    except (ValueError, TypeError, OSError) as err:
+    except (ValueError, TypeError) as err:
         log.error(err)
     else:
         return True
