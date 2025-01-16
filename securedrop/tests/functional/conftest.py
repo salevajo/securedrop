@@ -24,7 +24,7 @@ from tests.utils.i18n import get_test_locales
 # Function-scoped so that tests can be run in parallel if needed.  The fixture
 # needs to know the locale at setup time, so we do that parameterization here
 # rather than at the test level.
-@pytest.fixture(params=get_test_locales())
+@pytest.fixture(params=get_test_locales(default_locale=None))
 def firefox_web_driver(request) -> WebDriver:  # type: ignore
     locale = request.param.replace("_", "-")
     with get_web_driver(
