@@ -4,6 +4,8 @@
 
 - include_tasks: dh_moduli.yml
 
+- include_tasks: create_users.yml
+
 - include_tasks: ssh.yml
 
 - include_tasks: iptables.yml
