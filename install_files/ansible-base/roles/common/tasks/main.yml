@@ -7,8 +7,6 @@
 
 - include_tasks: post_ubuntu_install_checks.yml
 
-- include_tasks: create_users.yml
-
 - include_tasks: setup_etc_hosts.yml
 
 - include_tasks: harden_dns.yml
